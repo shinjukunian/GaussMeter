@@ -26,7 +26,10 @@ struct MagnetometerView: View {
                 HeadingView(heading: $magnetometer.heading).fixedSize()
             }
             
-            ValueDisplayView().environmentObject(magnetometer)
+            HStack{
+                ValueDisplayView().environmentObject(magnetometer)
+                DefineAxesView()
+            }
             
             Picker(selection: $output, label: Text(""), content: {
                 Text(Magnetometer.MagnetometerOutput.raw.description).tag(Magnetometer.MagnetometerOutput.raw)
