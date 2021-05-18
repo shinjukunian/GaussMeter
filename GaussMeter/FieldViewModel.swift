@@ -12,14 +12,14 @@ class FieldViewModel:ObservableObject{
     
     static var dummyModel:FieldViewModel{
         let startTime:Double=0
-        let endTime:Double=1000
-        let interval=0.02
+        let endTime:Double=10
+        let interval=0.01
         let xSlope:Double=1
-        let ySlope:Double = -0.2
+        let ySlope:Double = -1
         
         let field=stride(from: startTime, to: endTime, by: interval)
             .map{time -> Field in
-                let z=sin(time/10)*10
+                let z=sin(time*3)*2
                 let f=Field(x: time*xSlope+z, y: time*ySlope, z: z, timeStamp: time)
                 return f
             }

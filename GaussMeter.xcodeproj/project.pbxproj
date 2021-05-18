@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5A05107E26537FE7008D7D74 /* ValueDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */; };
 		5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107F26538EAA008D7D74 /* MagnetometerView.swift */; };
+		5A5D78CC2653F6AB005293B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5D78CB2653F6AB005293B5 /* Environment.swift */; };
 		5ACB02822653CDCA00D55C77 /* HeadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACB02812653CDCA00D55C77 /* HeadingView.swift */; };
 		5AF30CC72652547600B74B5D /* GaussMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC62652547600B74B5D /* GaussMeterApp.swift */; };
 		5AF30CC92652547600B74B5D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC82652547600B74B5D /* ContentView.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueDisplayView.swift; sourceTree = "<group>"; };
 		5A05107F26538EAA008D7D74 /* MagnetometerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerView.swift; sourceTree = "<group>"; };
+		5A5D78CB2653F6AB005293B5 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		5ACB02812653CDCA00D55C77 /* HeadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingView.swift; sourceTree = "<group>"; };
 		5AF30CC32652547600B74B5D /* GaussMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaussMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AF30CC62652547600B74B5D /* GaussMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussMeterApp.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				5AF30CC62652547600B74B5D /* GaussMeterApp.swift */,
 				5AF30CC82652547600B74B5D /* ContentView.swift */,
 				5ACB02812653CDCA00D55C77 /* HeadingView.swift */,
+				5A5D78CB2653F6AB005293B5 /* Environment.swift */,
 				5A05107F26538EAA008D7D74 /* MagnetometerView.swift */,
 				5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */,
 				5AF30CE7265350FB00B74B5D /* Compass.swift */,
@@ -178,6 +181,7 @@
 				5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */,
 				5AF30CEA2653512E00B74B5D /* Field.swift in Sources */,
 				5AF30CE22653376F00B74B5D /* FieldViewModel.swift in Sources */,
+				5A5D78CC2653F6AB005293B5 /* Environment.swift in Sources */,
 				5AF30CE02653297E00B74B5D /* FieldView.swift in Sources */,
 				5A05107E26537FE7008D7D74 /* ValueDisplayView.swift in Sources */,
 				5AF30CC92652547600B74B5D /* ContentView.swift in Sources */,

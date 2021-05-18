@@ -57,6 +57,7 @@ struct Field{
         return min(x, y, z)
     }
     
+    
 }
 
 final class UnitMagneticField:Dimension{

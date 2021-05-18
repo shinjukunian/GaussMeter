@@ -15,6 +15,7 @@ struct MagnetometerView: View {
     @Binding var isRunning:Bool
     @Binding var shouldReset:Bool
     
+    
     var body: some View {
         VStack(alignment: .center){
             HStack{
@@ -59,15 +60,17 @@ struct MagnetometerView: View {
     }
     
     var fieldView:some View{
+        let f=FieldView().environment(\.outputUnit, magnetometer.formatter.outputFormat)
         switch output {
         case .calibrated:
-            return FieldView()
+            return f
                 .environmentObject(magnetometer.calibratedFieldModel)
         case .raw:
-            return FieldView()
+            return f
                 .environmentObject(magnetometer.rawFieldModel)
         case .geomagnetic:
-            return FieldView().environmentObject(magnetometer.geomagneticFieldModel)
+            return f
+                .environmentObject(magnetometer.geomagneticFieldModel)
         }
     }
     

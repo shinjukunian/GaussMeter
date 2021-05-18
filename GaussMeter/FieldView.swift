@@ -6,25 +6,46 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct FieldView: View {
     
     struct DataPath: Hashable, Equatable{
         let path:CGPath
         let anchor:CGPoint
+        let anchorValue:Measurement<UnitMagneticField>
+        let formattedAnchorValue:String
     }
     
     @EnvironmentObject var model:FieldViewModel
     
-    let colors=[Color.red, Color.green, Color.blue]
+    @Environment(\.plotColors) var colors
+    
+    @Environment(\.outputUnit) var outputFormat
     
     @State var maxDuration:Double=10
+    
+    var formatter:MeasurementFormatter {
+        let formatter=MeasurementFormatter()
+        formatter.unitOptions = [.providedUnit]
+        formatter.unitStyle = .medium
+        formatter.numberFormatter.numberStyle = .scientific
+        formatter.numberFormatter.maximumFractionDigits=1
+        formatter.numberFormatter.minimumFractionDigits=1
+        return formatter
+    }
     
     var body: some View {
         GeometryReader(content: { geometry in
             let paths=self.paths(geometry: geometry)
             ForEach(Array(zip(paths, colors)), id: \.0, content: {(path,color) in
-                Path(path).stroke(color)
+                Path(path.path).stroke(color)
+                Text(path.formattedAnchorValue)
+                    .font(.callout)
+                    .foregroundColor(color)
+                    .fixedSize()
+                    .frame(width: 50, alignment: .trailing)
+                    .offset(x: path.anchor.x-50, y: path.anchor.y)
             })
             
         }).overlay(HStack{
@@ -36,7 +57,7 @@ struct FieldView: View {
     }
     
     
-    func paths(geometry:GeometryProxy)->[CGPath]{
+    func paths(geometry:GeometryProxy)->[DataPath]{
         
         var maxX=model.maxX
         var minX=model.minX
@@ -53,8 +74,9 @@ struct FieldView: View {
             data=Array(model.fieldData.suffix(from: model.fieldData.endIndex - idx))
         }
         
-        guard let first=data.first else{
-            return [CGPath]()
+        guard let first=data.first,
+              let last=data.last else{
+            return [DataPath]()
         }
         
         let minY=data.minY
@@ -81,9 +103,15 @@ struct FieldView: View {
             pY.addLine(to: CGPoint(x: f.timeStamp * xScale - x0, y: -f.y * yScale + maxY*yScale))
             pZ.addLine(to: CGPoint(x: f.timeStamp * xScale - x0 , y: -f.z * yScale + maxY*yScale))
         }
+        let formatter=self.formatter
+        let formattedValue=MagnometerFormatter.FormattedField.init(field: last, formatter: formatter, format: self.outputFormat)
+        
+        let xP=DataPath(path: pX, anchor: CGPoint(x: last.timeStamp * xScale - x0, y: -last.x * yScale + maxY*yScale), anchorValue: last.measurementX, formattedAnchorValue: formattedValue.x)
+        let yP=DataPath(path: pY, anchor: CGPoint(x: last.timeStamp * xScale - x0, y: -last.y * yScale + maxY*yScale), anchorValue: last.measurementY, formattedAnchorValue: formattedValue.y)
+        let zP=DataPath(path: pZ, anchor: CGPoint(x: last.timeStamp * xScale - x0, y: -last.z * yScale + maxY*yScale), anchorValue: last.measurementZ, formattedAnchorValue: formattedValue.z)
         
         
-        return [pX,pY,pZ]
+        return [xP,yP,zP]
     }
     
     
