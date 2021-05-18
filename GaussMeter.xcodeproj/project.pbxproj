@@ -7,19 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A05107E26537FE7008D7D74 /* ValueDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */; };
+		5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107F26538EAA008D7D74 /* MagnetometerView.swift */; };
+		5ACB02822653CDCA00D55C77 /* HeadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACB02812653CDCA00D55C77 /* HeadingView.swift */; };
 		5AF30CC72652547600B74B5D /* GaussMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC62652547600B74B5D /* GaussMeterApp.swift */; };
 		5AF30CC92652547600B74B5D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC82652547600B74B5D /* ContentView.swift */; };
 		5AF30CCB2652547700B74B5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AF30CCA2652547700B74B5D /* Assets.xcassets */; };
 		5AF30CCE2652547700B74B5D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AF30CCD2652547700B74B5D /* Preview Assets.xcassets */; };
+		5AF30CD62652548D00B74B5D /* MagnetometerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CD52652548D00B74B5D /* MagnetometerManager.swift */; };
+		5AF30CD826525E5600B74B5D /* MagnometerFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CD726525E5600B74B5D /* MagnometerFormatter.swift */; };
+		5AF30CE02653297E00B74B5D /* FieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CDF2653297E00B74B5D /* FieldView.swift */; };
+		5AF30CE22653376F00B74B5D /* FieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CE12653376F00B74B5D /* FieldViewModel.swift */; };
+		5AF30CE426533C4E00B74B5D /* Magnetometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CE326533C4E00B74B5D /* Magnetometer.swift */; };
+		5AF30CE626534C1D00B74B5D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CE526534C1D00B74B5D /* Extensions.swift */; };
+		5AF30CE8265350FB00B74B5D /* Compass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CE7265350FB00B74B5D /* Compass.swift */; };
+		5AF30CEA2653512E00B74B5D /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CE92653512E00B74B5D /* Field.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueDisplayView.swift; sourceTree = "<group>"; };
+		5A05107F26538EAA008D7D74 /* MagnetometerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerView.swift; sourceTree = "<group>"; };
+		5ACB02812653CDCA00D55C77 /* HeadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingView.swift; sourceTree = "<group>"; };
 		5AF30CC32652547600B74B5D /* GaussMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaussMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AF30CC62652547600B74B5D /* GaussMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussMeterApp.swift; sourceTree = "<group>"; };
 		5AF30CC82652547600B74B5D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5AF30CCA2652547700B74B5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5AF30CCD2652547700B74B5D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5AF30CCF2652547700B74B5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5AF30CD52652548D00B74B5D /* MagnetometerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerManager.swift; sourceTree = "<group>"; };
+		5AF30CD726525E5600B74B5D /* MagnometerFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnometerFormatter.swift; sourceTree = "<group>"; };
+		5AF30CDF2653297E00B74B5D /* FieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldView.swift; sourceTree = "<group>"; };
+		5AF30CE12653376F00B74B5D /* FieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldViewModel.swift; sourceTree = "<group>"; };
+		5AF30CE326533C4E00B74B5D /* Magnetometer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magnetometer.swift; sourceTree = "<group>"; };
+		5AF30CE526534C1D00B74B5D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5AF30CE7265350FB00B74B5D /* Compass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compass.swift; sourceTree = "<group>"; };
+		5AF30CE92653512E00B74B5D /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +76,17 @@
 			children = (
 				5AF30CC62652547600B74B5D /* GaussMeterApp.swift */,
 				5AF30CC82652547600B74B5D /* ContentView.swift */,
+				5ACB02812653CDCA00D55C77 /* HeadingView.swift */,
+				5A05107F26538EAA008D7D74 /* MagnetometerView.swift */,
+				5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */,
+				5AF30CE7265350FB00B74B5D /* Compass.swift */,
+				5AF30CDF2653297E00B74B5D /* FieldView.swift */,
+				5AF30CE526534C1D00B74B5D /* Extensions.swift */,
+				5AF30CE92653512E00B74B5D /* Field.swift */,
+				5AF30CE12653376F00B74B5D /* FieldViewModel.swift */,
+				5AF30CD52652548D00B74B5D /* MagnetometerManager.swift */,
+				5AF30CE326533C4E00B74B5D /* Magnetometer.swift */,
+				5AF30CD726525E5600B74B5D /* MagnometerFormatter.swift */,
 				5AF30CCA2652547700B74B5D /* Assets.xcassets */,
 				5AF30CCF2652547700B74B5D /* Info.plist */,
 				5AF30CCC2652547700B74B5D /* Preview Content */,
@@ -85,6 +118,8 @@
 			dependencies = (
 			);
 			name = GaussMeter;
+			packageProductDependencies = (
+			);
 			productName = GaussMeter;
 			productReference = 5AF30CC32652547600B74B5D /* GaussMeter.app */;
 			productType = "com.apple.product-type.application";
@@ -112,6 +147,8 @@
 				Base,
 			);
 			mainGroup = 5AF30CBA2652547600B74B5D;
+			packageReferences = (
+			);
 			productRefGroup = 5AF30CC42652547600B74B5D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,8 +175,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */,
+				5AF30CEA2653512E00B74B5D /* Field.swift in Sources */,
+				5AF30CE22653376F00B74B5D /* FieldViewModel.swift in Sources */,
+				5AF30CE02653297E00B74B5D /* FieldView.swift in Sources */,
+				5A05107E26537FE7008D7D74 /* ValueDisplayView.swift in Sources */,
 				5AF30CC92652547600B74B5D /* ContentView.swift in Sources */,
+				5AF30CE626534C1D00B74B5D /* Extensions.swift in Sources */,
+				5AF30CD826525E5600B74B5D /* MagnometerFormatter.swift in Sources */,
+				5AF30CE426533C4E00B74B5D /* Magnetometer.swift in Sources */,
+				5AF30CD62652548D00B74B5D /* MagnetometerManager.swift in Sources */,
 				5AF30CC72652547600B74B5D /* GaussMeterApp.swift in Sources */,
+				5AF30CE8265350FB00B74B5D /* Compass.swift in Sources */,
+				5ACB02822653CDCA00D55C77 /* HeadingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
