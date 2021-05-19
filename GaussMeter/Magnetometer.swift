@@ -37,6 +37,8 @@ class Magnetometer: ObservableObject {
     @Published var magneticField:MagnometerFormatter.FormattedField = .empty
     @Published var geomagneticField:MagnometerFormatter.FormattedField = .empty
     
+    @Published var attitude:EulerAngles = .default
+        
     @Published var rawFieldModel: FieldViewModel
     @Published var calibratedFieldModel: FieldViewModel
     @Published var geomagneticFieldModel: FieldViewModel
@@ -75,6 +77,9 @@ class Magnetometer: ObservableObject {
         compass.heading
             .receive(on: DispatchQueue.main)
             .assign(to: &$heading)
+//        manager.attitude //this uses an surprising amount to cpu
+//            .receive(on: DispatchQueue.main)
+//            .assign(to: &$attitude)
     }
     
     

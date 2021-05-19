@@ -28,8 +28,8 @@ struct MagnetometerView: View {
             }
             
             HStack{
-                ValueDisplayView().environmentObject(magnetometer)
-//                ThreeDDefineAxesView()
+                ValueDisplayView().environmentObject(magnetometer).fixedSize()
+//                ThreeDDefineAxesView(attitude: $magnetometer.attitude)
                 DefineAxesView()
             }
             
