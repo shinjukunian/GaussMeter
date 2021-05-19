@@ -12,9 +12,10 @@ struct MagnetometerView: View {
     
     @StateObject var magnetometer:Magnetometer = Magnetometer()
     @State var output = Magnetometer.MagnetometerOutput.raw
-    @Binding var isRunning:Bool
-    @Binding var shouldReset:Bool
     
+    @EnvironmentObject var communicator:MagnetometerCommunicator
+    
+    @State var shouldPresentShareSheet:Bool=false
     
     var body: some View {
         VStack(alignment: .center){
@@ -28,6 +29,7 @@ struct MagnetometerView: View {
             
             HStack{
                 ValueDisplayView().environmentObject(magnetometer)
+//                ThreeDDefineAxesView()
                 DefineAxesView()
             }
             
@@ -44,48 +46,53 @@ struct MagnetometerView: View {
             Spacer()
         }
         .onAppear{
-            isRunning=true
-            magnetometer.isRunning=isRunning
         }
-        .onReceive(Just(self.shouldReset), perform: { v in
+        .onReceive(communicator.$shouldReset, perform: { v in
             if v == true{
                 magnetometer.reset()
+                communicator.shouldReset=false
             }
-            shouldReset=false
         })
+        .onReceive(communicator.$isRunning, perform: { v in
+            magnetometer.isRunning=v
+        })
+        .onReceive(communicator.$share, perform: { v in
+            shouldPresentShareSheet=v
+        })
+        .sheet(isPresented: $shouldPresentShareSheet, onDismiss: {
+            communicator.share=false
+        }, content: {
+            ActivityViewController(model: currentModel)
+        })
+        
+        
+    }
+    
+    var currentModel:FieldViewModel{
+        switch output {
+        case .calibrated:
+            return magnetometer.calibratedFieldModel
+        case .raw:
+            return magnetometer.rawFieldModel
+        case .geomagnetic:
+            return magnetometer.geomagneticFieldModel
+        }
+    }
+    
+    
+    var fieldView:some View{
+        FieldView()
+            .environment(\.outputUnit, magnetometer.formatter.outputFormat)
+            .environmentObject(currentModel)
         
     }
     
     
-    func togleRunning(){
-        self.isRunning.toggle()
-        magnetometer.isRunning.toggle()
-    }
-    
-    var fieldView:some View{
-        let f=FieldView().environment(\.outputUnit, magnetometer.formatter.outputFormat)
-        switch output {
-        case .calibrated:
-            return f
-                .environmentObject(magnetometer.calibratedFieldModel)
-        case .raw:
-            return f
-                .environmentObject(magnetometer.rawFieldModel)
-        case .geomagnetic:
-            return f
-                .environmentObject(magnetometer.geomagneticFieldModel)
-        }
-    }
-    
-    func toggleRunning(){
-        self.isRunning.toggle()
-        self.magnetometer.isRunning.toggle()
-    }
 }
 
 struct MagnetometerView_Previews: PreviewProvider {
     static var previews: some View {
-        MagnetometerView(isRunning: Binding.constant(true), shouldReset: Binding.constant(false))
+        MagnetometerView().environmentObject(MagnetometerCommunicator())
     }
 }
 

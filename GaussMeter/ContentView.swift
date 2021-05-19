@@ -7,42 +7,67 @@
 
 import SwiftUI
 
+
+class MagnetometerCommunicator:ObservableObject{
+    @Published var isRunning:Bool=false
+    @Published var shouldReset:Bool=false
+    @Published var share:Bool=false
+}
+
 struct ContentView: View {
-    
-    @State var isRunning=false
-    @State var shouldReset=false
+        
+    @StateObject var communicator = MagnetometerCommunicator()
     
     var body: some View {
         
         NavigationView{
-                MagnetometerView(isRunning: $isRunning, shouldReset: $shouldReset)
+            MagnetometerView().environmentObject(communicator)
                 .padding(.vertical)
                 .navigationBarTitleDisplayMode(.inline)
                     .navigationTitle(Text("Magnetometer"))
                 .toolbar(content: {
+//                    ToolbarItem(placement: .bottomBar, content: {
+//                        Button(action: {
+//                            print("zero")
+//                        }, label: {
+//                            Text("Auto Zero")
+//
+//                        })
+//                    })
+//                    ToolbarItem(placement: .bottomBar, content: {
+//                        Button(action: {
+//                            print("zero")
+//                        }, label: {
+//                            Image(systemName: "waveform")
+//
+//                        })
+//                    })
+                    
                     ToolbarItem(placement: .bottomBar, content: {
                         Button(action: {
-                            print("zero")
+                            communicator.isRunning=false
+                            communicator.share=true
                         }, label: {
-                            Text("Auto Zero")
-                            
+                            Image(systemName: "square.and.arrow.up")
+
                         })
                     })
+                    
                     ToolbarItem(placement: .navigationBarTrailing, content: {
                         Button(action: {
-                            shouldReset=true
+                            communicator.shouldReset=true
                         }, label: {
                             Image(systemName: "arrow.counterclockwise")
-                        }).disabled(self.isRunning == false)
+                        }).disabled(communicator.isRunning == false)
                     })
                     
                     ToolbarItem(placement: .navigationBarTrailing, content: {
                         Button(action: {
                             
-                            isRunning.toggle()
+                            communicator.isRunning.toggle()
                             
                         }, label: {
-                            if isRunning == true{
+                            if communicator.isRunning == true{
                                 Text("Stop")
                             }
                             else{
@@ -51,6 +76,8 @@ struct ContentView: View {
                         })
                     })
                 })
+        }.onAppear{
+            communicator.isRunning=true
         }
     }
 }

@@ -7,12 +7,19 @@
 
 import Foundation
 
-struct Field{
+struct Field:Equatable,Codable{
     let x:Double
     let y:Double
     let z:Double
     
     var timeStamp:TimeInterval
+    
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case timeStamp
+        case x
+        case y
+        case z 
+    }
     
     init(field:Field, offset:TimeInterval) {
         self.x=field.x

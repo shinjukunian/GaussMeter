@@ -49,6 +49,7 @@ class FieldViewModel:ObservableObject{
         return self.minY
     }
     
+    
     init() {}
     
     init(subject:AnyPublisher<Field,Never>) {
@@ -71,7 +72,6 @@ class FieldViewModel:ObservableObject{
         self.fieldData.removeAll()
         self.startTime=Double.greatestFiniteMagnitude
     }
-    
     
 }
 
