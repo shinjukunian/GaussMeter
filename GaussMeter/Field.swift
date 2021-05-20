@@ -64,6 +64,14 @@ struct Field:Equatable,Codable{
         return min(x, y, z)
     }
     
+    var sum:Double{
+        return x+y+z
+    }
+    
+    var absSum:Double{
+        return abs(x) + abs(y) + abs(z)
+    }
+    
     
 }
 

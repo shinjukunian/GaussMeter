@@ -12,6 +12,7 @@ class MagnetometerCommunicator:ObservableObject{
     @Published var isRunning:Bool=false
     @Published var shouldReset:Bool=false
     @Published var share:Bool=false
+    @Published var playSound:Bool=false
 }
 
 struct ContentView: View {
@@ -34,14 +35,25 @@ struct ContentView: View {
 //
 //                        })
 //                    })
-//                    ToolbarItem(placement: .bottomBar, content: {
-//                        Button(action: {
-//                            print("zero")
-//                        }, label: {
-//                            Image(systemName: "waveform")
-//
-//                        })
-//                    })
+                    
+                    ToolbarItem(placement: .bottomBar, content: {
+                        Button(action: {
+                            communicator.playSound.toggle()
+                        }, label: {
+                            if communicator.playSound{
+                                Image(systemName: "speaker.slash")
+                            }
+                            else{
+                                Image(systemName: "speaker")
+                            }
+                            
+
+                        })
+                    })
+                    ToolbarItem(placement: .bottomBar, content:{
+                        Spacer()
+                        
+                    })
                     
                     ToolbarItem(placement: .bottomBar, content: {
                         Button(action: {
@@ -68,10 +80,10 @@ struct ContentView: View {
                             
                         }, label: {
                             if communicator.isRunning == true{
-                                Text("Stop")
+                                Image(systemName: "stop")
                             }
                             else{
-                                Text("Start")
+                                Image(systemName: "record.circle")
                             }
                         })
                     })

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5A05107E26537FE7008D7D74 /* ValueDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */; };
 		5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A05107F26538EAA008D7D74 /* MagnetometerView.swift */; };
+		5A100D3726564B1D00C00534 /* SoundGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A100D3626564B1D00C00534 /* SoundGenerator.swift */; };
+		5A100D3926564BA400C00534 /* AudioNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A100D3826564BA400C00534 /* AudioNode.swift */; };
 		5A4C73582654AD2C00D75793 /* CodableCSV in Frameworks */ = {isa = PBXBuildFile; productRef = 5A4C73572654AD2C00D75793 /* CodableCSV */; };
 		5A4C735A2654AD8E00D75793 /* FieldViewModel+Coding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C73592654AD8E00D75793 /* FieldViewModel+Coding.swift */; };
 		5A5D78CC2653F6AB005293B5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5D78CB2653F6AB005293B5 /* Environment.swift */; };
@@ -45,6 +47,8 @@
 /* Begin PBXFileReference section */
 		5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueDisplayView.swift; sourceTree = "<group>"; };
 		5A05107F26538EAA008D7D74 /* MagnetometerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerView.swift; sourceTree = "<group>"; };
+		5A100D3626564B1D00C00534 /* SoundGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundGenerator.swift; sourceTree = "<group>"; };
+		5A100D3826564BA400C00534 /* AudioNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioNode.swift; sourceTree = "<group>"; };
 		5A4C73592654AD8E00D75793 /* FieldViewModel+Coding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FieldViewModel+Coding.swift"; sourceTree = "<group>"; };
 		5A5D78CB2653F6AB005293B5 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		5A9217F726549554001794EE /* iPhoneModel.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = iPhoneModel.usdz; sourceTree = "<group>"; };
@@ -120,6 +124,8 @@
 		5AF30CC52652547600B74B5D /* GaussMeter */ = {
 			isa = PBXGroup;
 			children = (
+				5A100D3626564B1D00C00534 /* SoundGenerator.swift */,
+				5A100D3826564BA400C00534 /* AudioNode.swift */,
 				5AF30CC62652547600B74B5D /* GaussMeterApp.swift */,
 				5AF30CC82652547600B74B5D /* ContentView.swift */,
 				5ACB02812653CDCA00D55C77 /* HeadingView.swift */,
@@ -272,6 +278,7 @@
 				5AE03BA32654024300CB4BEF /* DefineAxesView.swift in Sources */,
 				5A4C735A2654AD8E00D75793 /* FieldViewModel+Coding.swift in Sources */,
 				5A05108026538EAA008D7D74 /* MagnetometerView.swift in Sources */,
+				5A100D3726564B1D00C00534 /* SoundGenerator.swift in Sources */,
 				5AF30CEA2653512E00B74B5D /* Field.swift in Sources */,
 				5AF30CE22653376F00B74B5D /* FieldViewModel.swift in Sources */,
 				5A5D78CC2653F6AB005293B5 /* Environment.swift in Sources */,
@@ -280,6 +287,7 @@
 				5AF30CC92652547600B74B5D /* ContentView.swift in Sources */,
 				5AF30CE626534C1D00B74B5D /* Extensions.swift in Sources */,
 				5AF30CD826525E5600B74B5D /* MagnometerFormatter.swift in Sources */,
+				5A100D3926564BA400C00534 /* AudioNode.swift in Sources */,
 				5AF30CE426533C4E00B74B5D /* Magnetometer.swift in Sources */,
 				5AF30CD62652548D00B74B5D /* MagnetometerManager.swift in Sources */,
 				5AF30CC72652547600B74B5D /* GaussMeterApp.swift in Sources */,

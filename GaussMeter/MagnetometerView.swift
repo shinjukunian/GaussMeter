@@ -11,7 +11,6 @@ import Combine
 struct MagnetometerView: View {
     
     @StateObject var magnetometer:Magnetometer = Magnetometer()
-    @State var output = Magnetometer.MagnetometerOutput.raw
     
     @EnvironmentObject var communicator:MagnetometerCommunicator
     
@@ -30,10 +29,10 @@ struct MagnetometerView: View {
             HStack{
                 ValueDisplayView().environmentObject(magnetometer).fixedSize()
 //                ThreeDDefineAxesView(attitude: $magnetometer.attitude)
-                DefineAxesView()
+//                DefineAxesView().fixedSize()
             }
             
-            Picker(selection: $output, label: Text(""), content: {
+            Picker(selection: $magnetometer.fieldOutput, label: Text(""), content: {
                 Text(Magnetometer.MagnetometerOutput.raw.description).tag(Magnetometer.MagnetometerOutput.raw)
                 Text(Magnetometer.MagnetometerOutput.calibrated.description).tag(Magnetometer.MagnetometerOutput.calibrated)
                 Text(Magnetometer.MagnetometerOutput.geomagnetic.description).tag(Magnetometer.MagnetometerOutput.geomagnetic)
@@ -44,8 +43,6 @@ struct MagnetometerView: View {
                 .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .padding([.top, .leading, .trailing])
             Spacer()
-        }
-        .onAppear{
         }
         .onReceive(communicator.$shouldReset, perform: { v in
             if v == true{
@@ -59,31 +56,25 @@ struct MagnetometerView: View {
         .onReceive(communicator.$share, perform: { v in
             shouldPresentShareSheet=v
         })
+        .onReceive(communicator.$playSound, perform: { v in
+            magnetometer.playSound=v
+        })
         .sheet(isPresented: $shouldPresentShareSheet, onDismiss: {
             communicator.share=false
         }, content: {
-            ActivityViewController(model: currentModel)
+            ActivityViewController(model: magnetometer.fieldModel)
         })
         
         
     }
     
-    var currentModel:FieldViewModel{
-        switch output {
-        case .calibrated:
-            return magnetometer.calibratedFieldModel
-        case .raw:
-            return magnetometer.rawFieldModel
-        case .geomagnetic:
-            return magnetometer.geomagneticFieldModel
-        }
-    }
+    
     
     
     var fieldView:some View{
         FieldView()
             .environment(\.outputUnit, magnetometer.formatter.outputFormat)
-            .environmentObject(currentModel)
+            .environmentObject(magnetometer.fieldModel)
         
     }
     

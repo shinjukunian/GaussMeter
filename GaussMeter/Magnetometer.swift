@@ -37,12 +37,52 @@ class Magnetometer: ObservableObject {
     @Published var magneticField:MagnometerFormatter.FormattedField = .empty
     @Published var geomagneticField:MagnometerFormatter.FormattedField = .empty
     
+    @Published var fieldModel:FieldViewModel
+    
     @Published var attitude:EulerAngles = .default
         
-    @Published var rawFieldModel: FieldViewModel
-    @Published var calibratedFieldModel: FieldViewModel
-    @Published var geomagneticFieldModel: FieldViewModel
     @Published var heading:Double=0
+    
+    private var outPut:AnyPublisher<Field,Never>{
+        switch fieldOutput {
+        case .raw:
+            return manager.rawMagneticField
+        case .calibrated:
+            return manager.magneticField
+        case .geomagnetic:
+            return compass.geomagneticField
+        }
+    }
+    
+    @Published var fieldOutput:MagnetometerOutput = .raw{
+        didSet{
+            fieldModel=FieldViewModel(subject: outPut)
+            if let g=self.generator{
+                g.subscribe(to: outPut)
+            }
+        }
+    }
+
+    var generator:SoundGenerator?
+    
+    @Published var playSound:Bool=false{
+        didSet{
+            guard playSound != oldValue else{return}
+            if playSound{
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.generator=SoundGenerator(subject: self.outPut)
+                    self.generator?.start()
+                }
+                
+            }
+            else{
+                generator?.stop()
+                generator=nil
+            }
+        }
+    }
+    
+
     
     @Published var isRunning:Bool=false{
         didSet{
@@ -56,15 +96,15 @@ class Magnetometer: ObservableObject {
         }
     }
     
+    
     var formatter:MagnometerFormatter
     
     var cancelables:Set<AnyCancellable>=Set<AnyCancellable>()
     
     init() {
         self.formatter=MagnometerFormatter(magnetometer: manager, compass: self.compass)
-        self.rawFieldModel=FieldViewModel(subject: manager.rawMagneticField)
-        self.calibratedFieldModel=FieldViewModel(subject: manager.magneticField)
-        self.geomagneticFieldModel=FieldViewModel(subject: compass.geomagneticField)
+        self.fieldModel=FieldViewModel(subject: manager.rawMagneticField)
+        
         formatter.$magneticField
             .receive(on: DispatchQueue.main)
             .assign(to: &$magneticField)
@@ -88,9 +128,8 @@ class Magnetometer: ObservableObject {
     }
     
     func reset(){
-        self.geomagneticFieldModel.reset()
-        self.calibratedFieldModel.reset()
-        self.rawFieldModel.reset()
+        self.fieldModel.reset()
+       
     }
     
     fileprivate func stop(){
