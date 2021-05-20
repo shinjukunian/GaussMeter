@@ -94,7 +94,7 @@ class AudioNode:ObservableObject, Identifiable, Equatable, Hashable{
         
     }
     
-    func apply(modulator:SoundGenerator.Modulator.ModulationValues){
+    func apply(modulator: Modulator.ModulationValues){
         self.frequency=modulator.frequency
         self.amplitude=modulator.amplitude
     }

@@ -9,15 +9,19 @@ import SwiftUI
 
 
 class MagnetometerCommunicator:ObservableObject{
+    
+    
     @Published var isRunning:Bool=false
     @Published var shouldReset:Bool=false
     @Published var share:Bool=false
     @Published var playSound:Bool=false
+    @Published var soundModulator:Modulator = .absoluteTotalLogAmplitude
 }
 
 struct ContentView: View {
         
     @StateObject var communicator = MagnetometerCommunicator()
+    
     
     var body: some View {
         
@@ -27,15 +31,7 @@ struct ContentView: View {
                 .navigationBarTitleDisplayMode(.inline)
                     .navigationTitle(Text("Magnetometer"))
                 .toolbar(content: {
-//                    ToolbarItem(placement: .bottomBar, content: {
-//                        Button(action: {
-//                            print("zero")
-//                        }, label: {
-//                            Text("Auto Zero")
-//
-//                        })
-//                    })
-                    
+
                     ToolbarItem(placement: .bottomBar, content: {
                         Button(action: {
                             communicator.playSound.toggle()
@@ -46,10 +42,58 @@ struct ContentView: View {
                             else{
                                 Image(systemName: "speaker")
                             }
+                        }).contextMenu(ContextMenu(menuItems: {
+                            if !communicator.playSound{
+                                Button(action: {
+                                    communicator.soundModulator = .absoluteTotalLogAmplitude
+                                }, label: {
+                                    Text("log sum")
+                                    if communicator.soundModulator == .absoluteTotalLogAmplitude{
+                                        Image(systemName: "checkmark")
+                                    }
+                                })
+                                
+                                Button(action: {
+                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .x)
+                                }, label: {
+                                    Text("log X")
+                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .x){
+                                        Image(systemName: "checkmark")
+                                    }
+                                })
+                                
+                                Button(action: {
+                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .y)
+                                }, label: {
+                                    Text("log Y")
+                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .y){
+                                        Image(systemName: "checkmark")
+                                    }
+                                })
+                                
+                                Button(action: {
+                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .z)
+                                }, label: {
+                                    Text("log Z")
+                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .z){
+                                        Image(systemName: "checkmark")
+                                    }
+                                })
+                                
+                                Button(action: {
+                                    communicator.soundModulator = .absoluteTotalAmplitude
+                                }, label: {
+                                    Text("sum")
+                                    if communicator.soundModulator == .absoluteTotalAmplitude {
+                                        Image(systemName: "checkmark")
+                                    }
+                                })
+                            }
                             
-
-                        })
+                            
+                        }))
                     })
+                   
                     ToolbarItem(placement: .bottomBar, content:{
                         Spacer()
                         
@@ -90,8 +134,11 @@ struct ContentView: View {
                 })
         }.onAppear{
             communicator.isRunning=true
-        }
+        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification), perform: { _ in
+                communicator.isRunning=false
+        })
     }
+    
 }
     
 

@@ -56,8 +56,13 @@ struct MagnetometerView: View {
         .onReceive(communicator.$share, perform: { v in
             shouldPresentShareSheet=v
         })
-        .onReceive(communicator.$playSound, perform: { v in
-            magnetometer.playSound=v
+        .onReceive(communicator.$playSound, perform: { play in
+            if play == true{
+                magnetometer.playSound(modulator: communicator.soundModulator)
+            }
+            else{
+                magnetometer.stopSound()
+            }
         })
         .sheet(isPresented: $shouldPresentShareSheet, onDismiss: {
             communicator.share=false

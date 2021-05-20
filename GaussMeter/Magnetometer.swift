@@ -65,25 +65,6 @@ class Magnetometer: ObservableObject {
 
     var generator:SoundGenerator?
     
-    @Published var playSound:Bool=false{
-        didSet{
-            guard playSound != oldValue else{return}
-            if playSound{
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.generator=SoundGenerator(subject: self.outPut)
-                    self.generator?.start()
-                }
-                
-            }
-            else{
-                generator?.stop()
-                generator=nil
-            }
-        }
-    }
-    
-
-    
     @Published var isRunning:Bool=false{
         didSet{
             guard isRunning != oldValue else{return}
@@ -143,4 +124,18 @@ class Magnetometer: ObservableObject {
         self.compass.startHeadingUpdates()
         
     }
+    
+    func playSound(modulator:Modulator){
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.generator=SoundGenerator(subject: self.outPut)
+            self.generator?.modulator=modulator
+            self.generator?.start()
+        }
+    }
+    
+    func stopSound(){
+        generator?.stop()
+        generator=nil
+    }
+    
 }

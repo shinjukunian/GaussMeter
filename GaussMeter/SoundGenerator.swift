@@ -9,42 +9,82 @@ import Foundation
 import AVFoundation
 import Combine
 
-class SoundGenerator:ObservableObject{
+enum Modulator: Identifiable, Equatable{
     
-    enum Modulator:String, Identifiable, Equatable{
-        
-        struct ModulationValues{
-            let frequency:Float
-            let amplitude:Float
-            
-            static let maxField:Double = 1000
-            static let minField:Double = 0
+    var id: String{
+        switch self {
+        case .none:
+            return "none"
+        case .absoluteLogAmplitude(let axis):
+            return "absoluteLogAmplitude_\(axis.id)"
+        case .absoluteTotalAmplitude:
+            return "absoluteTotalAmplitude"
+        case .absoluteTotalLogAmplitude:
+            return "absoluteTotalLogAmplitude"
         }
+    }
+    
+    struct ModulationValues{
+        let frequency:Float
+        let amplitude:Float
         
-        var id: String {return self.rawValue}
+        static let maxField:Double = 1000
+        static let minField:Double = 0
+    }
+    
+    enum Axis:Equatable, Identifiable{
+        case x
+        case y
+        case z
         
-        case absoluteAmplitude
-        case absoluteLogAmplitude
-        case none
-        
-        func modulationValues(field:Field)->ModulationValues{
+        var id: String{
             switch self {
-            case .none:
-                return ModulationValues(frequency: 1, amplitude: 1)
-            case .absoluteAmplitude:
-                let abs=field.absSum
-                
-                let relativeField=1-max(min(abs/ModulationValues.maxField,0.9),0.1)
-                return ModulationValues(frequency: 100/Float(relativeField), amplitude: 1)
-            case .absoluteLogAmplitude:
-                
-                let abs=log(max(field.absSum,1.01))
-                return ModulationValues(frequency: 100*Float(abs), amplitude: 1)
+            case .x:
+                return "x"
+            case .y:
+                return "y"
+            case .z:
+                return "z"
             }
         }
         
     }
     
+    case absoluteTotalAmplitude
+    case absoluteTotalLogAmplitude
+    case none
+    case absoluteLogAmplitude(axis:Axis)
+    
+    func modulationValues(field:Field)->ModulationValues{
+        switch self {
+        case .none:
+            return ModulationValues(frequency: 1, amplitude: 1)
+        case .absoluteTotalAmplitude:
+            let abs=field.absSum
+            
+            let relativeField=1-max(min(abs/ModulationValues.maxField,0.9),0.1)
+            return ModulationValues(frequency: 100/Float(relativeField), amplitude: 1)
+        case .absoluteTotalLogAmplitude:
+            let abs=log(max(field.absSum,1.01))
+            return ModulationValues(frequency: min(100*Float(abs),10_000), amplitude: 1)
+        case .absoluteLogAmplitude(let axis):
+            let v:Double
+            switch axis {
+            case .x:
+                v=abs(field.x)
+            case .y:
+                v=abs(field.y)
+            case .z:
+                v=abs(field.z)
+            }
+            let abs=log(max(v,1.01))
+            return ModulationValues(frequency: min(100*Float(abs),10_000), amplitude: 1)
+        }
+    }
+    
+}
+
+class SoundGenerator:ObservableObject{
     
     @Published var isRunning:Bool=false{
         didSet{
@@ -61,7 +101,7 @@ class SoundGenerator:ObservableObject{
     
     let node:AudioNode
     
-    @Published var modulator = Modulator.absoluteLogAmplitude
+    @Published var modulator = Modulator.absoluteTotalLogAmplitude
     
     var cancelables:Set<AnyCancellable>=Set<AnyCancellable>()
 
@@ -75,18 +115,15 @@ class SoundGenerator:ObservableObject{
         self.node=node
         
         
-//        #if os(iOS)
-//        let audioSession = AVAudioSession.sharedInstance()
-//        do {
-//            // Set the audio session category, mode, and options.
-//            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.mixWithOthers])
-//            try audioSession.setPreferredSampleRate(22050)
-//            try audioSession.setActive(true, options: [])
-//        } catch {
-//            print("Failed to set audio session category.")
-//        }
-//        
-//        #endif
+        #if os(iOS)
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.ambient, mode: .default, options: [])
+        } catch let error{
+            print("Failed to set audio session category. \(error)")
+        }
+        
+        #endif
         
         let mainMixer = engine.mainMixerNode
         
