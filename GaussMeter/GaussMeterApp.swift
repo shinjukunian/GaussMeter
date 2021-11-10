@@ -11,7 +11,7 @@ import SwiftUI
 struct GaussMeterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MagnetometerTabView()
         }
     }
 }

@@ -10,10 +10,39 @@ import Combine
 import CoreLocation
 
 class Compass:NSObject,ObservableObject, CLLocationManagerDelegate{
+    
+    struct Heading{
+        let magneticHeading:Double
+        let trueHeading:Double
+        let accuracy:Double
+        let timeStamp:Date
+        let field:Field
+        
+        init(magneticHeading:Double = 0, trueHeaading:Double = 0, accuracy:Double = 0, timeStamp:Date = Date(), field:Field = Field(x: 0, y: 0, z: 0, timeStamp: 0)){
+            self.magneticHeading=magneticHeading
+            self.trueHeading=trueHeaading
+            self.accuracy=accuracy
+            self.timeStamp=timeStamp
+            self.field=field
+        }
+        
+        init(heading:CLHeading){
+            self.trueHeading=heading.trueHeading
+            self.accuracy=heading.headingAccuracy
+            self.magneticHeading=heading.magneticHeading
+            self.timeStamp=heading.timestamp
+            self.field=Field(heading: heading)
+        }
+        
+        static let dummy = Heading()
+        
+    }
+    
+    
     static let shared=Compass()
     
     fileprivate let _geomagneticField = PassthroughSubject<Field, Never>()
-    fileprivate let _heading = PassthroughSubject<Double, Never>()
+    fileprivate let _heading = PassthroughSubject<Heading, Never>()
     
     fileprivate let locationManager=CLLocationManager()
     
@@ -31,7 +60,7 @@ class Compass:NSObject,ObservableObject, CLLocationManagerDelegate{
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         self.currentheading=newHeading
-        self._heading.send(newHeading.magneticHeading)
+        self._heading.send(Heading(heading: newHeading))
     }
     
     func startHeadingUpdates(){

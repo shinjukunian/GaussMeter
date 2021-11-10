@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HeadingView: View {
     
-    @Binding var heading:Double
+    let heading:Double
     
     var body: some View {
         Triangle().fill(
@@ -35,6 +35,6 @@ struct Triangle: Shape {
 
 struct HeadingView_Previews: PreviewProvider {
     static var previews: some View {
-        HeadingView(heading: Binding.constant(45))
+        HeadingView(heading: 45)
     }
 }

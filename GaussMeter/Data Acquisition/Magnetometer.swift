@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+
 class Magnetometer: ObservableObject {
     
     enum MagnetometerOutput:String, Equatable, Identifiable, CustomStringConvertible{
@@ -41,7 +42,7 @@ class Magnetometer: ObservableObject {
     
     @Published var attitude:EulerAngles = .default
         
-    @Published var heading:Double=0
+    @Published var heading:Compass.Heading = .dummy
     
     private var outPut:AnyPublisher<Field,Never>{
         switch fieldOutput {
@@ -95,12 +96,14 @@ class Magnetometer: ObservableObject {
         formatter.$geomagneticField
             .receive(on: DispatchQueue.main)
             .assign(to: &$geomagneticField)
+        
         compass.heading
             .receive(on: DispatchQueue.main)
             .assign(to: &$heading)
-//        manager.attitude //this uses an surprising amount to cpu
-//            .receive(on: DispatchQueue.main)
-//            .assign(to: &$attitude)
+        
+        manager.attitude
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$attitude)
     }
     
     

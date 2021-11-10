@@ -10,7 +10,6 @@ import SwiftUI
 
 class MagnetometerCommunicator:ObservableObject{
     
-    
     @Published var isRunning:Bool=false
     @Published var shouldReset:Bool=false
     @Published var share:Bool=false
@@ -18,10 +17,9 @@ class MagnetometerCommunicator:ObservableObject{
     @Published var soundModulator:Modulator = .absoluteTotalLogAmplitude
 }
 
-struct ContentView: View {
+struct GaussMeterView: View {
         
-    @StateObject var communicator = MagnetometerCommunicator()
-    
+    @ObservedObject var communicator: MagnetometerCommunicator
     
     var body: some View {
         
@@ -32,7 +30,7 @@ struct ContentView: View {
                     .navigationTitle(Text("Magnetometer"))
                 .toolbar(content: {
 
-                    ToolbarItem(placement: .bottomBar, content: {
+                    ToolbarItem(placement: .navigationBarLeading, content: {
                         Button(action: {
                             communicator.playSound.toggle()
                         }, label: {
@@ -94,12 +92,12 @@ struct ContentView: View {
                         }))
                     })
                    
-                    ToolbarItem(placement: .bottomBar, content:{
-                        Spacer()
-                        
-                    })
+//                    ToolbarItem(placement: .bottomBar, content:{
+//                        Spacer()
+//
+//                    })
                     
-                    ToolbarItem(placement: .bottomBar, content: {
+                    ToolbarItem(placement: .navigationBarLeading, content: {
                         Button(action: {
                             communicator.isRunning=false
                             communicator.share=true
@@ -135,7 +133,7 @@ struct ContentView: View {
         }.onAppear{
             communicator.isRunning=true
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification), perform: { _ in
-                communicator.isRunning=false
+            communicator.isRunning=false
         })
     }
     
@@ -144,6 +142,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        GaussMeterView(communicator: MagnetometerCommunicator())
     }
 }

@@ -23,7 +23,7 @@ struct MagnetometerView: View {
                     Text(MagnometerFormatter.OutputUnit.gauss.description).tag(MagnometerFormatter.OutputUnit.gauss)
                     Text(MagnometerFormatter.OutputUnit.microTesla.description).tag(MagnometerFormatter.OutputUnit.microTesla)
                 }).pickerStyle(SegmentedPickerStyle()).fixedSize()
-                HeadingView(heading: $magnetometer.heading).fixedSize()
+                HeadingView(heading: magnetometer.heading.trueHeading).fixedSize()
             }
             
             HStack{
