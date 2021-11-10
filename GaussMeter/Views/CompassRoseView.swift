@@ -89,6 +89,7 @@ struct CompassRoseView: View {
             })
                 .aspectRatio(1, contentMode: .fit)
                 .rotationEffect(Angle(degrees: -heading))
+
             
         }
         
@@ -99,7 +100,7 @@ struct CompassRoseView: View {
 
 struct CompassRoseView_Previews: PreviewProvider {
     static var previews: some View {
-        CompassRoseView(heading: 0)
+        CompassRoseView(heading: 45)
     }
 }
 

@@ -18,9 +18,9 @@ class Compass:NSObject,ObservableObject, CLLocationManagerDelegate{
         let timeStamp:Date
         let field:Field
         
-        init(magneticHeading:Double = 0, trueHeaading:Double = 0, accuracy:Double = 0, timeStamp:Date = Date(), field:Field = Field(x: 0, y: 0, z: 0, timeStamp: 0)){
+        init(magneticHeading:Double = 0, trueHeading:Double = 0, accuracy:Double = 0, timeStamp:Date = Date(), field:Field = Field(x: 0, y: 0, z: 0, timeStamp: 0)){
             self.magneticHeading=magneticHeading
-            self.trueHeading=trueHeaading
+            self.trueHeading=trueHeading
             self.accuracy=accuracy
             self.timeStamp=timeStamp
             self.field=field
@@ -32,6 +32,10 @@ class Compass:NSObject,ObservableObject, CLLocationManagerDelegate{
             self.magneticHeading=heading.magneticHeading
             self.timeStamp=heading.timestamp
             self.field=Field(heading: heading)
+        }
+        
+        var variation:Double{
+            return trueHeading - magneticHeading
         }
         
         static let dummy = Heading()
