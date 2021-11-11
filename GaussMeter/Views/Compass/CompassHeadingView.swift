@@ -19,11 +19,17 @@ struct CompassHeadingView: View {
     var body: some View {
         
         ZStack(alignment: .center){
-            let t1=CATransform3DMakeRotation(CGFloat(attitude.pitch), 1, 0, 0)
-            let t2=CATransform3DRotate(t1, CGFloat(-attitude.roll), 0, 1, 0)
+            let t1=CATransform3DMakeTranslation(0, 0, 0)
+            let r1=CATransform3DMakeRotation(CGFloat(attitude.pitch), 0, 0, 1)
+            let transform=CATransform3DConcat(t1, r1)
+//            let t2=CATransform3DRotate(t1, CGFloat(-attitude.roll), 0, 1, 0)
+            
+            let axis=attitude.axis
             
             CompassRoseView(heading: self.mode == .trueHeading ? heading.trueHeading : heading.magneticHeading)
-                .projectionEffect(.init(t2))
+                .rotation3DEffect(axis.angle, axis: axis.axis, anchor: .center, anchorZ: 10, perspective: 1)
+//                .rotation3DEffect(-attitude.rollAngle, axis: (0,1,0), anchor: .center, anchorZ: -30, perspective: 0.5)
+//                .projectionEffect(.init(r1))
             Circle().stroke()
                 .frame(width: 15, height: 15, alignment: .center)
             
@@ -53,7 +59,7 @@ struct CompassHeadingView: View {
 
 struct CompassHeadingView_Previews: PreviewProvider {
     static var previews: some View {
-        CompassHeadingView(heading: Compass.Heading(magneticHeading: 45, trueHeading: 30), attitude: EulerAngles(roll: 0, pitch: 0, yaw: 0), mode: .trueHeading)
+        CompassHeadingView(heading: Compass.Heading(magneticHeading: 0, trueHeading: 0), attitude: EulerAngles(roll: Angle(degrees: 0).radians, pitch: Angle(degrees: 0).radians, yaw: Angle(degrees: 0).radians), mode: .trueHeading)
     }
 }
 

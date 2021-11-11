@@ -8,17 +8,41 @@
 import Foundation
 
 struct Field:Equatable,Codable{
+    
+    enum FieldAccuracy:Int, Codable, Equatable, CustomStringConvertible, RawRepresentable{
+        case high
+        case low
+        case medium
+        case uncalibrated
+        
+        var description: String{
+            switch self {
+            case .high:
+                return NSLocalizedString("High", comment: "accuracy high")
+            case .low:
+                return NSLocalizedString("Low", comment: "accuracy high")
+            case .medium:
+                return NSLocalizedString("Medium", comment: "accuracy high")
+            case .uncalibrated:
+                return NSLocalizedString("Uncalibrated", comment: "accuracy high")
+            }
+        }
+    }
+    
     let x:Double
     let y:Double
     let z:Double
     
     var timeStamp:TimeInterval
     
+    let accuracy: FieldAccuracy
+    
     enum CodingKeys: String, CodingKey, CaseIterable {
         case timeStamp
         case x
         case y
-        case z 
+        case z
+        case accuracy
     }
     
     init(field:Field, offset:TimeInterval) {
@@ -26,6 +50,7 @@ struct Field:Equatable,Codable{
         self.y=field.y
         self.z=field.z
         self.timeStamp=field.timeStamp-offset
+        self.accuracy=field.accuracy
     }
     
     init(x:Double, y:Double, z:Double, timeStamp:TimeInterval){
@@ -33,6 +58,7 @@ struct Field:Equatable,Codable{
         self.y=y
         self.z=z
         self.timeStamp=timeStamp
+        self.accuracy = .uncalibrated
     }
     
     init(){
@@ -40,6 +66,7 @@ struct Field:Equatable,Codable{
         self.y=0
         self.z=0
         self.timeStamp=0
+        self.accuracy = .uncalibrated
     }
     
     var measurementX:Measurement<UnitMagneticField>{

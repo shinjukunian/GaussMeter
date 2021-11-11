@@ -23,6 +23,7 @@ struct MagnetometerView: View {
                     Text(MagnometerFormatter.OutputUnit.gauss.description).tag(MagnometerFormatter.OutputUnit.gauss)
                     Text(MagnometerFormatter.OutputUnit.microTesla.description).tag(MagnometerFormatter.OutputUnit.microTesla)
                 }).pickerStyle(SegmentedPickerStyle()).fixedSize()
+                
                 HeadingView(heading: magnetometer.heading.trueHeading).fixedSize()
             }
             
@@ -32,12 +33,14 @@ struct MagnetometerView: View {
 //                DefineAxesView().fixedSize()
             }
             
+            
             Picker(selection: $magnetometer.fieldOutput, label: Text(""), content: {
                 Text(Magnetometer.MagnetometerOutput.raw.description).tag(Magnetometer.MagnetometerOutput.raw)
                 Text(Magnetometer.MagnetometerOutput.calibrated.description).tag(Magnetometer.MagnetometerOutput.calibrated)
                 Text(Magnetometer.MagnetometerOutput.geomagnetic.description).tag(Magnetometer.MagnetometerOutput.geomagnetic)
             }).pickerStyle(SegmentedPickerStyle()).fixedSize()
             
+            Text("Accuracy: \(magnetometer.fieldModel.currentField.accuracy.description)").font(.caption2)
             
             self.fieldView
                 .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)

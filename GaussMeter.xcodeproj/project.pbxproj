@@ -25,6 +25,7 @@
 		5AEEF06D273B5F7F006CE970 /* MagnetometerTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEF06C273B5F7F006CE970 /* MagnetometerTabView.swift */; };
 		5AEEF06F273B6280006CE970 /* CompassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEF06E273B6280006CE970 /* CompassView.swift */; };
 		5AEEF071273B6D1F006CE970 /* HeadingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEF070273B6D1F006CE970 /* HeadingLabel.swift */; };
+		5AEEF08F273D0262006CE970 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEF08E273D0262006CE970 /* EulerAngles.swift */; };
 		5AF30CC72652547600B74B5D /* GaussMeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC62652547600B74B5D /* GaussMeterApp.swift */; };
 		5AF30CC92652547600B74B5D /* GaussMeterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF30CC82652547600B74B5D /* GaussMeterView.swift */; };
 		5AF30CCB2652547700B74B5D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AF30CCA2652547700B74B5D /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		5AEEF06C273B5F7F006CE970 /* MagnetometerTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetometerTabView.swift; sourceTree = "<group>"; };
 		5AEEF06E273B6280006CE970 /* CompassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassView.swift; sourceTree = "<group>"; };
 		5AEEF070273B6D1F006CE970 /* HeadingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingLabel.swift; sourceTree = "<group>"; };
+		5AEEF08E273D0262006CE970 /* EulerAngles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EulerAngles.swift; sourceTree = "<group>"; };
 		5AF30CC32652547600B74B5D /* GaussMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GaussMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AF30CC62652547600B74B5D /* GaussMeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussMeterApp.swift; sourceTree = "<group>"; };
 		5AF30CC82652547600B74B5D /* GaussMeterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GaussMeterView.swift; sourceTree = "<group>"; };
@@ -115,10 +117,7 @@
 				5A05107D26537FE7008D7D74 /* ValueDisplayView.swift */,
 				5AF30CDF2653297E00B74B5D /* FieldView.swift */,
 				5AE03BA22654024300CB4BEF /* DefineAxesView.swift */,
-				5A31C4B7273B44DE00408727 /* CompassRoseView.swift */,
-				5AEEF06A273B5B29006CE970 /* CompassHeadingView.swift */,
-				5AEEF06E273B6280006CE970 /* CompassView.swift */,
-				5AEEF070273B6D1F006CE970 /* HeadingLabel.swift */,
+				5AEEF072273BA3AB006CE970 /* Compass */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -151,6 +150,17 @@
 			path = GaussMeterTests;
 			sourceTree = "<group>";
 		};
+		5AEEF072273BA3AB006CE970 /* Compass */ = {
+			isa = PBXGroup;
+			children = (
+				5A31C4B7273B44DE00408727 /* CompassRoseView.swift */,
+				5AEEF06A273B5B29006CE970 /* CompassHeadingView.swift */,
+				5AEEF06E273B6280006CE970 /* CompassView.swift */,
+				5AEEF070273B6D1F006CE970 /* HeadingLabel.swift */,
+			);
+			path = Compass;
+			sourceTree = "<group>";
+		};
 		5AF30CBA2652547600B74B5D = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +191,7 @@
 				5A31C4B6273B44B400408727 /* Data Acquisition */,
 				5AF30CE526534C1D00B74B5D /* Extensions.swift */,
 				5AF30CE92653512E00B74B5D /* Field.swift */,
+				5AEEF08E273D0262006CE970 /* EulerAngles.swift */,
 				5AF30CE12653376F00B74B5D /* FieldViewModel.swift */,
 				5A4C73592654AD8E00D75793 /* FieldViewModel+Coding.swift */,
 				5AF30CD726525E5600B74B5D /* MagnometerFormatter.swift */,
@@ -316,6 +327,7 @@
 			files = (
 				5AEEF06D273B5F7F006CE970 /* MagnetometerTabView.swift in Sources */,
 				5AEEF06B273B5B29006CE970 /* CompassHeadingView.swift in Sources */,
+				5AEEF08F273D0262006CE970 /* EulerAngles.swift in Sources */,
 				5AE03BA32654024300CB4BEF /* DefineAxesView.swift in Sources */,
 				5AEEF06F273B6280006CE970 /* CompassView.swift in Sources */,
 				5A4C735A2654AD8E00D75793 /* FieldViewModel+Coding.swift in Sources */,

@@ -29,7 +29,11 @@ struct CompassView: View {
     }
     
     @StateObject var magnetometer:Magnetometer = Magnetometer()
+    
     @AppStorage(CompassHeadingMode.defaultsKey) var mode = CompassHeadingMode.trueHeading
+    
+    @AppStorage(AngularDisplayMode.defaultsKey) var displayMode:AngularDisplayMode = .navigational
+    
     
     @State var minorFeedbackGenerator=UIImpactFeedbackGenerator(style: .light)
     @State var feedbackGenerator=UIImpactFeedbackGenerator(style: .medium)
@@ -55,11 +59,25 @@ struct CompassView: View {
             
             CompassHeadingView(heading: magnetometer.heading, attitude: magnetometer.attitude, mode: mode)
             
-            HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.trueHeading, unit: .degrees), description: NSLocalizedString("True Heading", comment: "heading title"), headingUncertainty: Measurement<UnitAngle>(value: magnetometer.heading.accuracy, unit: .degrees), isVariation: false)
+            Group{
+                HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.trueHeading, unit: .degrees), description: NSLocalizedString("True Heading", comment: "heading title"), headingUncertainty: Measurement<UnitAngle>(value: magnetometer.heading.accuracy, unit: .degrees), isVariation: false, displayMode: displayMode)
+                
+                HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.magneticHeading, unit: .degrees), description: NSLocalizedString("Magnetic Heading", comment: "heading title"), headingUncertainty: Measurement<UnitAngle>(value: magnetometer.heading.accuracy, unit: .degrees), isVariation: false, displayMode: displayMode)
+                
+                HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.variation, unit: .degrees), description: NSLocalizedString("Variation", comment: "heading title"), headingUncertainty: nil, isVariation: true, displayMode: displayMode)
+            }
+            .contextMenu(ContextMenu(menuItems: {
+                ForEach(AngularDisplayMode.allCases, id: \.id, content: {mode in
+                     Button(action: {
+                        self.displayMode=mode
+                    }, label: {
+                        Text(mode.description)
+                    })
+                })
+
+            }))
             
-            HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.magneticHeading, unit: .degrees), description: NSLocalizedString("Magnetic Heading", comment: "heading title"), headingUncertainty: Measurement<UnitAngle>(value: magnetometer.heading.accuracy, unit: .degrees), isVariation: false)
             
-            HeadingLabel(heading: Measurement<UnitAngle>.init(value: magnetometer.heading.variation, unit: .degrees), description: NSLocalizedString("Variation", comment: "heading title"), headingUncertainty: nil, isVariation: true)
             
             
             Spacer()

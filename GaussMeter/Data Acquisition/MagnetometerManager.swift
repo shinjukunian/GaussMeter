@@ -8,6 +8,7 @@
 import Foundation
 import CoreMotion
 import Combine
+import SwiftUI
 
 extension Field{
     init(magneticField:CMMagneticField, timestamp:TimeInterval) {
@@ -15,40 +16,34 @@ extension Field{
         self.y=magneticField.y
         self.z=magneticField.z
         self.timeStamp=timestamp
+        self.accuracy = .uncalibrated
+    }
+    
+    init(calibratedField:CMCalibratedMagneticField, timeStamp: TimeInterval){
+        self.x=calibratedField.field.x
+        self.y=calibratedField.field.y
+        self.z=calibratedField.field.z
+        self.timeStamp=timeStamp
+        self.accuracy = .init(accuracy: calibratedField.accuracy)
     }
 }
 
-struct EulerAngles{
-    let roll:Float
-    let pitch:Float
-    let yaw:Float
-    
-    static let `default` = EulerAngles(roll: 0, pitch: 0, yaw: 0)
-    
-    init(roll:Float, pitch:Float, yaw:Float) {
-        self.roll=roll
-        self.pitch=pitch
-        self.yaw=yaw
-    }
-    
-    init(_ s:SIMD3<Float>) {
-        self.pitch=s.x
-        self.yaw=s.y
-        self.roll=s.z
-    }
-    
-    init(attitude:CMAttitude) {
-        self.pitch=Float(attitude.pitch)
-        self.roll=Float(attitude.roll)
-        self.yaw=Float(attitude.yaw)
-    }
-    
-    var simdAngles:SIMD3<Float>{
-        return SIMD3(pitch,yaw,roll)
+extension Field.FieldAccuracy{
+    init(accuracy:CMMagneticFieldCalibrationAccuracy){
+        switch accuracy {
+        case .uncalibrated:
+            self = .uncalibrated
+        case .low:
+            self = .low
+        case .medium:
+            self = .medium
+        case .high:
+            self = .high
+        @unknown default:
+            fatalError()
+        }
     }
 }
-
-
 
 
 class MagnetometerManager{
@@ -71,16 +66,22 @@ class MagnetometerManager{
     }
     
     func startUpdates(){
-        self.motionManager.startMagnetometerUpdates(to: OperationQueue(), withHandler: {data,_ in
+        self.motionManager.startMagnetometerUpdates(to: OperationQueue(), withHandler: {data,error in
             if let data=data{
                 self._rawMagneticField.send(Field(magneticField: data.magneticField, timestamp: data.timestamp))
             }
+            if let error=error{
+                print(error)
+            }
         })
         
-        self.motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue(), withHandler: {data, _ in
+        self.motionManager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue(), withHandler: {data, error in
             if let data=data{
-                self._magneticField.send(Field(magneticField: data.magneticField.field, timestamp: data.timestamp))
+                self._magneticField.send(Field(calibratedField: data.magneticField, timeStamp: data.timestamp))
                 self._attitude.send(EulerAngles(attitude: data.attitude))
+            }
+            if let error=error{
+                print(error)
             }
         })
     }

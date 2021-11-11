@@ -40,6 +40,10 @@ class Compass:NSObject,ObservableObject, CLLocationManagerDelegate{
         
         static let dummy = Heading()
         
+        var fieldAccuracy:Field.FieldAccuracy{
+            return field.accuracy
+        }
+        
     }
     
     
@@ -92,5 +96,22 @@ extension Field{
         self.y=heading.y
         self.z=heading.z
         self.timeStamp=heading.timestamp.timeIntervalSinceReferenceDate
+        self.accuracy = .init(headingAccuracy: heading.headingAccuracy)
+    }
+}
+
+
+extension Field.FieldAccuracy{
+    init(headingAccuracy:CLLocationAccuracy){
+        switch headingAccuracy{
+        case _ where headingAccuracy < 0:
+            self = .uncalibrated
+        case 0...2:
+            self = .high
+        case 2...4:
+            self = .medium
+        default:
+            self = .low
+        }
     }
 }

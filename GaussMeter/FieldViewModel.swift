@@ -29,6 +29,9 @@ class FieldViewModel:ObservableObject{
     }
     
     @Published var fieldData:[Field]=[Field]()
+    
+    @Published var currentField:Field = Field()
+    
     var startTime:TimeInterval=Double.greatestFiniteMagnitude
     
     var cancelables:Set<AnyCancellable>=Set<AnyCancellable>()
@@ -61,7 +64,7 @@ class FieldViewModel:ObservableObject{
                 self.fieldData.append(contentsOf: value.map({v in
                     return Field(field: v, offset: self.startTime)
                 }))
-                
+                self.currentField = value.last ?? Field()
                 self.objectWillChange.send()
                 
             })

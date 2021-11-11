@@ -114,10 +114,9 @@ struct HeadingLabel: View {
     
     let isVariation:Bool
     
-    @AppStorage(AngularDisplayMode.defaultsKey) var displayMode:AngularDisplayMode = .navigational
+    let displayMode:AngularDisplayMode
     
     var formatter=MeasurementFormatter()
-
     
     var headingLabel: some View{
         let head="\(description): \(displayMode.formattedMeasurement(measurement: heading, formatter: formatter, isVariation: isVariation))"
@@ -131,18 +130,7 @@ struct HeadingLabel: View {
     }
     
     var body: some View {
-        
             headingLabel
-            .contextMenu(ContextMenu(menuItems: {
-                ForEach(AngularDisplayMode.allCases, id: \.id, content: {mode in
-                    return Button(action: {
-                        self.displayMode=mode
-                    }, label: {
-                        Text(mode.description)
-                    })
-                })
-
-            }))
     }
     
     
