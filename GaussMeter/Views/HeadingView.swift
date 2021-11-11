@@ -15,8 +15,10 @@ struct HeadingView: View {
         Triangle().fill(
             Color.red
         ).background(Color.clear)
-        .aspectRatio(0.75 , contentMode: .fit)
-        .rotationEffect(Angle(degrees: 360-heading))
+            .aspectRatio(0.5 , contentMode: .fit)
+            .rotationEffect(Angle(degrees: 360-heading), anchor: .center)
+        
+        
     }
 }
 

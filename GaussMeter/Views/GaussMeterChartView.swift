@@ -17,14 +17,14 @@ class MagnetometerCommunicator:ObservableObject{
     @Published var soundModulator:Modulator = .absoluteTotalLogAmplitude
 }
 
-struct GaussMeterView: View {
+struct GaussMeterChartView: View {
         
     @ObservedObject var communicator: MagnetometerCommunicator
     
     var body: some View {
         
         NavigationView{
-            MagnetometerView().environmentObject(communicator)
+            GaussMeterChartViewBody().environmentObject(communicator)
                 .padding(.vertical)
                 .navigationBarTitleDisplayMode(.inline)
                     .navigationTitle(Text("Magnetometer"))
@@ -140,8 +140,8 @@ struct GaussMeterView: View {
 }
     
 
-struct ContentView_Previews: PreviewProvider {
+struct GaussMeterChartView_Previews: PreviewProvider {
     static var previews: some View {
-        GaussMeterView(communicator: MagnetometerCommunicator())
+        GaussMeterChartView(communicator: MagnetometerCommunicator())
     }
 }

@@ -45,6 +45,8 @@ struct Field:Equatable,Codable{
         case accuracy
     }
     
+    static let zeroField = Field(x: 0, y: 0, z: 0, timeStamp: 0)
+    
     init(field:Field, offset:TimeInterval) {
         self.x=field.x
         self.y=field.y
@@ -99,7 +101,9 @@ struct Field:Equatable,Codable{
         return abs(x) + abs(y) + abs(z)
     }
     
-    
+    static func - (left:Field, right:Field)->Field{
+        return Field(x: left.x - right.x, y: left.y - right.y, z: left.z-right.z, timeStamp: left.timeStamp)
+    }
 }
 
 final class UnitMagneticField:Dimension{

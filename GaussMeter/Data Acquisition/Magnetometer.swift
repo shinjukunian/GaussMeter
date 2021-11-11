@@ -55,12 +55,14 @@ class Magnetometer: ObservableObject {
         }
     }
     
+    
     @Published var fieldOutput:MagnetometerOutput = .raw{
         didSet{
             fieldModel=FieldViewModel(subject: outPut)
             if let g=self.generator{
                 g.subscribe(to: outPut)
             }
+            self.zeroField = .zeroField
         }
     }
 
@@ -82,6 +84,12 @@ class Magnetometer: ObservableObject {
     var formatter:MagnometerFormatter
     
     var cancelables:Set<AnyCancellable>=Set<AnyCancellable>()
+    
+    var zeroField:Field = .zeroField {
+        didSet{
+            self.formatter.zeroField = zeroField
+        }
+    }
     
     init() {
         self.formatter=MagnometerFormatter(magnetometer: manager, compass: self.compass)

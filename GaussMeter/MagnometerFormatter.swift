@@ -42,7 +42,7 @@ class MagnometerFormatter: ObservableObject{
         
     }
     
-    struct FormattedField{
+    struct FormattedField: CustomStringConvertible{
         var x:String
         let y:String
         let z:String
@@ -58,11 +58,24 @@ class MagnometerFormatter: ObservableObject{
             self.field=Field()
         }
         
-        init(field:Field, formatter:MeasurementFormatter, format:OutputUnit) {
-            self.x=formatter.string(from: field.measurementX.converted(to: format.measurementUnit))
-            self.y=formatter.string(from: field.measurementY.converted(to: format.measurementUnit))
-            self.z=formatter.string(from: field.measurementZ.converted(to: format.measurementUnit))
-            self.field=Field()
+        init(field:Field, formatter:MeasurementFormatter, format:OutputUnit, zeroField:Field? = nil) {
+            if let zero=zeroField{
+                let sub=field-zero
+                self.x=formatter.string(from: sub.measurementX.converted(to: format.measurementUnit))
+                self.y=formatter.string(from: sub.measurementY.converted(to: format.measurementUnit))
+                self.z=formatter.string(from: sub.measurementZ.converted(to: format.measurementUnit))
+                self.field=sub
+            }
+            else{
+                self.x=formatter.string(from: field.measurementX.converted(to: format.measurementUnit))
+                self.y=formatter.string(from: field.measurementY.converted(to: format.measurementUnit))
+                self.z=formatter.string(from: field.measurementZ.converted(to: format.measurementUnit))
+                self.field=field
+            }
+        }
+        
+        var description: String{
+            return String(format: NSLocalizedString("X: %@ Y:%@ Z:%@", comment: "Formatted Field"), self.x, self.y, self.z)
         }
     }
     
@@ -77,6 +90,9 @@ class MagnometerFormatter: ObservableObject{
     var cancelables:Set<AnyCancellable>=Set<AnyCancellable>()
 
     
+    var zeroField:Field = .zeroField
+    
+    
     init(magnetometer:MagnetometerManager, compass:Compass) {
         self.measurementFormatter=MeasurementFormatter()
         self.measurementFormatter.unitOptions = [.providedUnit]
@@ -89,23 +105,28 @@ class MagnometerFormatter: ObservableObject{
         magnetometer.magneticField.receive(on: DispatchQueue.global(qos: .background))
             .throttle(for: .seconds(0.2), scheduler: RunLoop.main, latest: true)
             .sink(receiveCompletion: {_ in}, receiveValue: {f in
-                self.magneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat)
+                self.magneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat, zeroField: self.zeroField)
             })
             .store(in: &cancelables)
         
         magnetometer.rawMagneticField.receive(on: DispatchQueue.global(qos: .background))
             .throttle(for: .seconds(0.2), scheduler: RunLoop.main, latest: true)
-            .sink(receiveCompletion: {_ in}, receiveValue: {f in
-                self.rawMagneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat)
+            .sink(receiveCompletion: {_ in}, receiveValue: { [self]f in
+                self.rawMagneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat, zeroField: zeroField)
             })
             .store(in: &cancelables)
         
         compass.geomagneticField.receive(on: DispatchQueue.global(qos: .background))
             .throttle(for: .seconds(0.2), scheduler: RunLoop.main, latest: true)
             .sink(receiveCompletion: {_ in}, receiveValue: {f in
-                self.geomagneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat)
+                self.geomagneticField=FormattedField(field: f, formatter: self.measurementFormatter, format: self.outputFormat, zeroField: self.zeroField)
             })
             .store(in: &cancelables)
+    }
+    
+    
+    func formattedField(field:Field)->FormattedField{
+        return FormattedField(field: field, formatter: self.measurementFormatter, format: self.outputFormat, zeroField: nil)
     }
     
 }

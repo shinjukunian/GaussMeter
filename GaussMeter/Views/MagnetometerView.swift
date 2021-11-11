@@ -2,96 +2,181 @@
 //  MagnetometerView.swift
 //  GaussMeter
 //
-//  Created by Morten Bertz on 2021/05/18.
+//  Created by Morten Bertz on 2021/11/11.
 //
 
 import SwiftUI
-import Combine
 
 struct MagnetometerView: View {
     
+    enum MagnetometerAxis:Int, Equatable, CustomStringConvertible, CaseIterable{
+        case x
+        case y
+        case z
+        
+        var description: String{
+            switch self {
+            case .x:
+                return NSLocalizedString("X", comment: "x axis")
+            case .y:
+                return NSLocalizedString("Y", comment: "y axis")
+            case .z:
+                return NSLocalizedString("Z", comment: "z axis")
+            }
+        }
+        
+        var color:Color{
+            switch self {
+            case .x:
+                return .red
+            case .y:
+                return .green
+            case .z:
+                return .blue
+            } 
+        }
+        
+    }
+    
     @StateObject var magnetometer:Magnetometer = Magnetometer()
     
-    @EnvironmentObject var communicator:MagnetometerCommunicator
-    
-    @State var shouldPresentShareSheet:Bool=false
+    @State var axis = MagnetometerAxis.x
     
     var body: some View {
-        VStack(alignment: .center){
+        
+        VStack(spacing: 20.0){
             HStack{
-                Picker(selection: $magnetometer.formatter.outputFormat, label: Text(""), content: {
-                    Text(MagnometerFormatter.OutputUnit.gauss.description).tag(MagnometerFormatter.OutputUnit.gauss)
-                    Text(MagnometerFormatter.OutputUnit.microTesla.description).tag(MagnometerFormatter.OutputUnit.microTesla)
-                }).pickerStyle(SegmentedPickerStyle()).fixedSize()
+                VStack(spacing: 15.0){
+                    Text("Signal").font(.caption)
+                    Picker(selection: $magnetometer.fieldOutput, label: EmptyView(), content: {
+                        Text(Magnetometer.MagnetometerOutput.raw.description).tag(Magnetometer.MagnetometerOutput.raw)
+                        Text(Magnetometer.MagnetometerOutput.calibrated.description).tag(Magnetometer.MagnetometerOutput.calibrated)
+                    }).pickerStyle(SegmentedPickerStyle())//.fixedSize()
+                }
+                Spacer()
+                VStack{
+                    Text("Axis").font(.caption)
+                    Picker(selection: $axis, content: {
+                        ForEach(MagnetometerAxis.allCases, id: \.self, content: {a in
+                            Text(a.description)
+                                .foregroundColor(a.color)
+                                .tag(a)
+                        })
+                    }, label: {EmptyView()})
+                        .pickerStyle(.segmented)//.fixedSize()
+                }
                 
-                HeadingView(heading: magnetometer.heading.trueHeading).fixedSize()
             }
+            
+            
+            Group{
+                switch axis {
+                case .x:
+                    switch magnetometer.fieldOutput{
+                    case .raw:
+                        Text(magnetometer.formatter.rawMagneticField.x)
+                    case .geomagnetic:
+                        Text(magnetometer.formatter.geomagneticField.x)
+                    case .calibrated:
+                        Text(magnetometer.formatter.magneticField.x)
+                    }
+                    
+                case .y:
+                    switch magnetometer.fieldOutput{
+                    case .raw:
+                        Text(magnetometer.formatter.rawMagneticField.y)
+                    case .geomagnetic:
+                        Text(magnetometer.formatter.geomagneticField.y)
+                    case .calibrated:
+                        Text(magnetometer.formatter.magneticField.y)
+                    }
+                case .z:
+                    switch magnetometer.fieldOutput{
+                    case .raw:
+                        Text(magnetometer.formatter.rawMagneticField.z)
+                    case .geomagnetic:
+                        Text(magnetometer.formatter.geomagneticField.z)
+                    case .calibrated:
+                        Text(magnetometer.formatter.magneticField.z)
+                    }
+                }
+            }.frame(maxWidth: .infinity)
+                .padding(.vertical)
+                .font(.largeTitle)
+                .background(RoundedRectangle(cornerSize: CGSize(width: 10, height: 10)).fill(axis.color.opacity(0.2)))
             
             HStack{
-                ValueDisplayView().environmentObject(magnetometer).fixedSize()
-//                ThreeDDefineAxesView(attitude: $magnetometer.attitude)
-//                DefineAxesView().fixedSize()
+                VStack{
+                    Text("Unit").font(.caption)
+                    Picker(selection: $magnetometer.formatter.outputFormat, label: Text(""), content: {
+                        Text(MagnometerFormatter.OutputUnit.gauss.description).tag(MagnometerFormatter.OutputUnit.gauss)
+                        Text(MagnometerFormatter.OutputUnit.microTesla.description).tag(MagnometerFormatter.OutputUnit.microTesla)
+                    }).pickerStyle(SegmentedPickerStyle()).fixedSize()
+                }
+                
             }
             
+            GroupBox{
+                
+                Button(action: {
+                    switch magnetometer.fieldOutput{
+                    case .calibrated:
+                        magnetometer.zeroField = magnetometer.fieldModel.currentField
+                    case .raw:
+                        magnetometer.zeroField = magnetometer.rawMagneticField.field
+                    case .geomagnetic:
+                        magnetometer.zeroField = magnetometer.geomagneticField.field
+                    }
+                    
+                    
+                }, label: {
+                    Text("Zero").font(.title2)
+                }).frame(maxWidth: 200)
+                
+            }.contextMenu(ContextMenu(menuItems: {
+                if #available(iOS 15.0, *) {
+                    Button(role: .cancel, action: {
+                        magnetometer.zeroField = .zeroField
+                    }, label: {
+                        Text("Reset")
+                    })
+                } else {
+                    Button(action: {
+                        magnetometer.zeroField = .zeroField
+                    }, label: {
+                        Text("Reset")
+                    })
+                }
+               
+            }))
             
-            Picker(selection: $magnetometer.fieldOutput, label: Text(""), content: {
-                Text(Magnetometer.MagnetometerOutput.raw.description).tag(Magnetometer.MagnetometerOutput.raw)
-                Text(Magnetometer.MagnetometerOutput.calibrated.description).tag(Magnetometer.MagnetometerOutput.calibrated)
-                Text(Magnetometer.MagnetometerOutput.geomagnetic.description).tag(Magnetometer.MagnetometerOutput.geomagnetic)
-            }).pickerStyle(SegmentedPickerStyle()).fixedSize()
+            if magnetometer.zeroField != .zeroField{
+                VStack(spacing: 0.0){
+                    Text("Background")
+                    Text(magnetometer.formatter.formattedField(field: magnetometer.zeroField).description)
+                }.font(.caption2)
+            }
             
-            Text("Accuracy: \(magnetometer.fieldModel.currentField.accuracy.description)").font(.caption2)
+            DefineAxesView()
             
-            self.fieldView
-                .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealWidth: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, idealHeight: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, maxHeight: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .padding([.top, .leading, .trailing])
+            
             Spacer()
+            
         }
-        .onReceive(communicator.$shouldReset, perform: { v in
-            if v == true{
-                magnetometer.reset()
-                communicator.shouldReset=false
-            }
-        })
-        .onReceive(communicator.$isRunning, perform: { v in
-            magnetometer.isRunning=v
-        })
-        .onReceive(communicator.$share, perform: { v in
-            shouldPresentShareSheet=v
-        })
-        .onReceive(communicator.$playSound, perform: { play in
-            if play == true{
-                magnetometer.playSound(modulator: communicator.soundModulator)
-            }
-            else{
-                magnetometer.stopSound()
-            }
-        })
-        .sheet(isPresented: $shouldPresentShareSheet, onDismiss: {
-            communicator.share=false
-        }, content: {
-            ActivityViewController(model: magnetometer.fieldModel)
-        })
+        .padding(.all)
         
+        .onAppear(perform: {
+            magnetometer.isRunning=true
+        })
+        .onDisappear(perform: {
+            magnetometer.isRunning=false
+        })
         
     }
-    
-    
-    
-    
-    var fieldView:some View{
-        FieldView()
-            .environment(\.outputUnit, magnetometer.formatter.outputFormat)
-            .environmentObject(magnetometer.fieldModel)
-        
-    }
-    
-    
 }
 
 struct MagnetometerView_Previews: PreviewProvider {
     static var previews: some View {
-        MagnetometerView().environmentObject(MagnetometerCommunicator())
+        MagnetometerView()
     }
 }
-
