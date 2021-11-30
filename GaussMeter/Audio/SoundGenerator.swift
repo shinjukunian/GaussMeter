@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 
-enum Modulator: Identifiable, Equatable{
+enum Modulator: Identifiable, Equatable, CaseIterable, Hashable, CustomStringConvertible{
     
     var id: String{
         switch self {
@@ -24,6 +24,10 @@ enum Modulator: Identifiable, Equatable{
         }
     }
     
+    
+    
+    static var allCases: [Modulator] = [.absoluteTotalAmplitude, .absoluteTotalLogAmplitude, .absoluteLogAmplitude(axis: .x) ,.absoluteLogAmplitude(axis: .y), .absoluteLogAmplitude(axis: .z)]
+    
     struct ModulationValues{
         let frequency:Float
         let amplitude:Float
@@ -32,7 +36,61 @@ enum Modulator: Identifiable, Equatable{
         static let minField:Double = 0
     }
     
-    enum Axis:Equatable, Identifiable{
+    var description: String{
+        switch self {
+        case .absoluteTotalAmplitude:
+            return NSLocalizedString("Amplitude", comment: "Sound Modulator")
+        case .absoluteTotalLogAmplitude:
+            return NSLocalizedString("Log Amplitude", comment: "Sound modulator")
+        case .none:
+            return NSLocalizedString("Raw", comment: "sound modulator")
+        case .absoluteLogAmplitude(let axis):
+            switch axis {
+            case .x:
+                return NSLocalizedString("Log Amplitude X", comment: "sound modulator")
+            case .y:
+                return NSLocalizedString("Log Amplitude Y", comment: "sound modulator")
+            case .z:
+                return NSLocalizedString("Log Amplitude Z", comment: "sound modulator")
+            }
+        }
+    }
+    
+    
+//    static func == (lhs: Modulator, rhs: Modulator) -> Bool {
+//        switch lhs {
+//        case .absoluteTotalAmplitude:
+//            switch rhs {
+//            case .absoluteTotalAmplitude:
+//                return true
+//            case .absoluteTotalLogAmplitude, .none, .absoluteLogAmplitude(_):
+//                return false
+//            }
+//        case .absoluteTotalLogAmplitude:
+//            switch rhs {
+//            case .absoluteTotalLogAmplitude:
+//                return true
+//            case .absoluteTotalAmplitude, .none, .absoluteLogAmplitude(_):
+//                return false
+//            }
+//        case .none:
+//            switch rhs {
+//            case .none:
+//                return true
+//            case .absoluteTotalAmplitude, .absoluteTotalLogAmplitude, .absoluteLogAmplitude(_):
+//                return false
+//            }
+//        case .absoluteLogAmplitude(let axis_left):
+//            switch rhs {
+//            case .absoluteTotalAmplitude, .absoluteTotalLogAmplitude, .none:
+//                return false
+//            case .absoluteLogAmplitude(let axis_right):
+//                return axis_right == axis_left
+//            }
+//        }
+//    }
+    
+    enum Axis:Equatable, Identifiable, Hashable, CaseIterable, CustomStringConvertible{
         case x
         case y
         case z
@@ -48,6 +106,18 @@ enum Modulator: Identifiable, Equatable{
             }
         }
         
+        static let localizedTitel = NSLocalizedString("Axis", comment: "Modulator title")
+        
+        var description: String{
+            switch self {
+            case .x:
+                return NSLocalizedString("X", comment: "axis x")
+            case .y:
+                return NSLocalizedString("Y", comment: "axis y")
+            case .z:
+                return NSLocalizedString("Z", comment: "axis x")
+            }
+        }
     }
     
     case absoluteTotalAmplitude

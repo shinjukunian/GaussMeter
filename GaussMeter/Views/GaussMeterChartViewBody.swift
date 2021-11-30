@@ -24,7 +24,6 @@ struct GaussMeterChartViewBody: View {
                     Text(MagnometerFormatter.OutputUnit.microTesla.description).tag(MagnometerFormatter.OutputUnit.microTesla)
                 }).pickerStyle(SegmentedPickerStyle()).fixedSize()
                 
-//                HeadingView(heading: magnetometer.heading.trueHeading).fixedSize()
                 Image(systemName: "location.north.circle")
                     .fixedSize()
                     .foregroundColor(Color.red)
@@ -70,6 +69,13 @@ struct GaussMeterChartViewBody: View {
             else{
                 magnetometer.stopSound()
             }
+        })
+        .onReceive(communicator.$soundModulator, perform: {mod in
+            if communicator.playSound{
+                magnetometer.stopSound()
+                magnetometer.playSound(modulator: mod)
+            }
+            
         })
         .sheet(isPresented: $shouldPresentShareSheet, onDismiss: {
             communicator.share=false

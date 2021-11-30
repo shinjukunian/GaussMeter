@@ -96,7 +96,7 @@ struct EulerAngles{
             
             self.angle=Angle(radians: Double(angle))
             
-            if abs(self.angle.degrees) < 0.3{
+            if abs(self.angle.degrees) < 0.000001{
                 self.axis = (x:CGFloat(1), y:CGFloat(0), z:CGFloat(0))
             }
             else{

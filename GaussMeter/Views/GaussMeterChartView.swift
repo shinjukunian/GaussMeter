@@ -15,11 +15,12 @@ class MagnetometerCommunicator:ObservableObject{
     @Published var share:Bool=false
     @Published var playSound:Bool=false
     @Published var soundModulator:Modulator = .absoluteTotalLogAmplitude
+    
 }
 
 struct GaussMeterChartView: View {
         
-    @ObservedObject var communicator: MagnetometerCommunicator
+    @StateObject var communicator=MagnetometerCommunicator()
     
     var body: some View {
         
@@ -27,7 +28,6 @@ struct GaussMeterChartView: View {
             GaussMeterChartViewBody().environmentObject(communicator)
                 .padding(.vertical)
                 .navigationBarTitleDisplayMode(.inline)
-                    .navigationTitle(Text("Magnetometer"))
                 .toolbar(content: {
 
                     ToolbarItem(placement: .navigationBarLeading, content: {
@@ -41,61 +41,18 @@ struct GaussMeterChartView: View {
                                 Image(systemName: "speaker")
                             }
                         }).contextMenu(ContextMenu(menuItems: {
-                            if !communicator.playSound{
-                                Button(action: {
-                                    communicator.soundModulator = .absoluteTotalLogAmplitude
-                                }, label: {
-                                    Text("log sum")
-                                    if communicator.soundModulator == .absoluteTotalLogAmplitude{
-                                        Image(systemName: "checkmark")
-                                    }
-                                })
-                                
-                                Button(action: {
-                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .x)
-                                }, label: {
-                                    Text("log X")
-                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .x){
-                                        Image(systemName: "checkmark")
-                                    }
-                                })
-                                
-                                Button(action: {
-                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .y)
-                                }, label: {
-                                    Text("log Y")
-                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .y){
-                                        Image(systemName: "checkmark")
-                                    }
-                                })
-                                
-                                Button(action: {
-                                    communicator.soundModulator = .absoluteLogAmplitude(axis: .z)
-                                }, label: {
-                                    Text("log Z")
-                                    if communicator.soundModulator == .absoluteLogAmplitude(axis: .z){
-                                        Image(systemName: "checkmark")
-                                    }
-                                })
-                                
-                                Button(action: {
-                                    communicator.soundModulator = .absoluteTotalAmplitude
-                                }, label: {
-                                    Text("sum")
-                                    if communicator.soundModulator == .absoluteTotalAmplitude {
-                                        Image(systemName: "checkmark")
-                                    }
-                                })
-                            }
                             
-                            
+                            Picker(selection: $communicator.soundModulator, content: {
+                                ForEach(Modulator.allCases, content: {mod in
+                                    Text(mod.description).tag(mod)
+                                })
+                            }, label: {
+                                Text("Method")
+                            })
+
                         }))
                     })
                    
-//                    ToolbarItem(placement: .bottomBar, content:{
-//                        Spacer()
-//
-//                    })
                     
                     ToolbarItem(placement: .navigationBarLeading, content: {
                         Button(action: {

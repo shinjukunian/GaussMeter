@@ -15,13 +15,12 @@ struct MagnetometerTabView: View {
         case magnetometer
     }
     
-    @StateObject var magnetometer=MagnetometerCommunicator()
     @SceneStorage("selectedTab") var selectedTab:Tabs = .chart
     
     var body: some View {
         
         TabView(selection: $selectedTab){
-            GaussMeterChartView(communicator: magnetometer)
+            GaussMeterChartView()
                 .tabItem({
                 Label(title: {Text("Chart")}, icon: {Image(systemName: "chart.xyaxis.line")})
                 })
